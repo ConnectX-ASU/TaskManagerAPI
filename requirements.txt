@@ -1,7 +1,6 @@
 gunicorn
 flask
 tensorflow
-keras
 numpy
 nltk
 gensim

@@ -5,4 +5,3 @@ keras
 numpy
 nltk
 gensim
-nltk.corpus

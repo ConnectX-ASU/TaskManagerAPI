@@ -4,6 +4,5 @@ tensorflow
 keras
 numpy
 nltk
-json
 gensim
 nltk.corpus

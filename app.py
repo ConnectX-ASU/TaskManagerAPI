@@ -8,23 +8,20 @@ import numpy as np
 from nltk import word_tokenize
 from tensorflow.keras.preprocessing.text import one_hot, Tokenizer
 import json
-import nltk
-from nltk.corpus import stopwords
-# Download NLTK data
-nltk.download('stopwords')
+
+
 #Preprocessing text function
 def preprocess(text):
-    stop_words = set(stopwords.words('english'))
-    custom_stop_words = ['from', 'subject', 're', 'edu', 'use']
-    stop_words.update(custom_stop_words)
+    custom_stop_words = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now']
 
     # Tokenize the text
     tokens = word_tokenize(text)
 
-    # Filter out stopwords and short tokens
-    filtered_tokens = [token for token in tokens if token.lower() not in stop_words and len(token) > 3]
+    # Filter out custom stopwords and short tokens
+    filtered_tokens = [token for token in tokens if token.lower() not in custom_stop_words and len(token) > 3]
 
     return filtered_tokens
+
 
 # Load the trained model
 model = load_model("my_model2.h5")

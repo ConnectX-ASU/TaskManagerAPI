@@ -10,7 +10,8 @@ from tensorflow.keras.preprocessing.text import one_hot, Tokenizer
 import json
 import nltk
 from nltk.corpus import stopwords
-
+# Download NLTK data
+nltk.download('stopwords')
 #Preprocessing text function
 def preprocess(text):
     stop_words = set(stopwords.words('english'))

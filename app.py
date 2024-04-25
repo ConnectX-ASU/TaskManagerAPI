@@ -36,9 +36,10 @@ def predict():
         text = data['text']
         
         text_processed = preprocess(text)
-        return jsonify(text_processed)
+        
         text_tokenized = tokenizer.texts_to_sequences([text_processed])
         text_padded = pad_sequences(text_tokenized, maxlen=42, padding='post')
+        return jsonify(text_padded)
         predictions = model.predict(text_padded)
         predicted_priority = int(np.argmax(predictions))
         response = {'predicted_priority': predicted_priority}

@@ -8,21 +8,22 @@ import numpy as np
 from nltk import word_tokenize
 from tensorflow.keras.preprocessing.text import one_hot, Tokenizer
 import json
-import gensim
 import nltk
 from nltk.corpus import stopwords
 
 #Preprocessing text function
 def preprocess(text):
-    nltk.download("stopwords")
-    stop_words = stopwords.words('english')
-    stop_words.extend(['from', 'subject', 're', 'edu', 'use'])
-    result = []
-    for token in gensim.utils.simple_preprocess(text):
-        if token not in gensim.parsing.preprocessing.STOPWORDS and len(token) > 3 and token not in stop_words:
-            result.append(token)
+    stop_words = set(stopwords.words('english'))
+    custom_stop_words = ['from', 'subject', 're', 'edu', 'use']
+    stop_words.update(custom_stop_words)
 
-    return result
+    # Tokenize the text
+    tokens = word_tokenize(text)
+
+    # Filter out stopwords and short tokens
+    filtered_tokens = [token for token in tokens if token.lower() not in stop_words and len(token) > 3]
+
+    return filtered_tokens
 
 # Load the trained model
 model = load_model("my_model2.h5")

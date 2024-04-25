@@ -34,13 +34,14 @@ def predict():
     try:
         data = request.get_json(force=True)
         text = data['text']
+        return jsonify(text)
         text_processed = preprocess(text)
         text_tokenized = tokenizer.texts_to_sequences([text_processed])
         text_padded = pad_sequences(text_tokenized, maxlen=42, padding='post')
         predictions = model.predict(text_padded)
         predicted_priority = int(np.argmax(predictions))
         response = {'predicted_priority': predicted_priority}
-        return jsonify(response)
+        #return jsonify(response)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

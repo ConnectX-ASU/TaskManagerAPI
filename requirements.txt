@@ -4,4 +4,4 @@ tensorflow
 numpy
 nltk
 gensim
-scipy
+scipy==1.7.3

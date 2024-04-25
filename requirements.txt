@@ -3,5 +3,4 @@ flask
 tensorflow
 numpy
 nltk
-gensim
-scipy==1.7.3
+

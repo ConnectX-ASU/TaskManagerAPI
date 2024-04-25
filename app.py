@@ -34,8 +34,9 @@ def predict():
     try:
         data = request.get_json(force=True)
         text = data['text']
-        return jsonify(text)
+        
         text_processed = preprocess(text)
+        return jsonify(text_processed)
         text_tokenized = tokenizer.texts_to_sequences([text_processed])
         text_padded = pad_sequences(text_tokenized, maxlen=42, padding='post')
         predictions = model.predict(text_padded)

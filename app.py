@@ -27,7 +27,7 @@ def preprocess(text):
     return filtered_tokens
 
 model = load_model("my_model2.h5")
-tokenizer = pickle.load(open('tokenizer.pkl', 'rb'))
+tokenizer = pickle.load(open('okenizer.pkl', 'rb'))
 
 @app.route('/', methods=['POST'])
 def predict():

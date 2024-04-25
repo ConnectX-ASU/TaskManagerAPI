@@ -1,7 +1,7 @@
 import pickle
 import numpy as np
 from flask import Flask, request, jsonify
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 
@@ -26,7 +26,10 @@ def preprocess(text):
     
     return filtered_tokens
 
-model = load_model("my_model2.h5")
+# Load the SavedModel
+model_dir = 'saved_model/'
+model = tf.saved_model.load(model_dir)
+
 tokenizer = pickle.load(open('okenizer.pkl', 'rb'))
 
 @app.route('/', methods=['POST'])
@@ -35,16 +38,21 @@ def predict():
         data = request.get_json(force=True)
         text = data['text']
         
+        # Preprocess text
         text_processed = preprocess(text)
-        
         text_tokenized = tokenizer.texts_to_sequences([text_processed])
         text_padded = pad_sequences(text_tokenized, maxlen=42, padding='post')
         
-        predictions = model.predict(text_padded)
-        predicted_priority = int(np.argmax(predictions))
-        return jsonify(predicted_priority)
+        # Convert numpy arrays to tensors (if needed)
+        text_padded = tf.convert_to_tensor(text_padded, dtype=tf.float32)
+        
+        # Perform inference using the loaded model
+        predictions = model(text_padded)
+        predicted_priority = int(np.argmax(predictions.numpy()))  # Convert predictions to NumPy array
+        
         response = {'predicted_priority': predicted_priority}
-        #return jsonify(response)
+        return jsonify(response)
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

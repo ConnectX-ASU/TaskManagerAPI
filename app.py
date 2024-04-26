@@ -4,7 +4,8 @@ from flask import Flask, request, jsonify
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
-
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 app = Flask(__name__)
 
 def preprocess(text):

@@ -5,7 +5,9 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 import os
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 app = Flask(__name__)
 
 def preprocess(text):
@@ -28,8 +30,16 @@ def preprocess(text):
     return filtered_tokens
 
 # Load the SavedModel
-model_dir = 'saved_model/'
-model = tf.saved_model.load(model_dir)
+model_config_name = 'model_config.json'
+model_file_name = 'best_model.h5'
+
+# Load model architecture from JSON
+with open(model_config_name, "r") as json_file:
+    json_string = json_file.read()
+model = tf.keras.models.model_from_json(json_string)
+
+# Load model weights from HDF5
+model.load_weights(model_file_name)
 
 tokenizer = pickle.load(open('okenizer.pkl', 'rb'))
 
@@ -44,12 +54,9 @@ def predict():
         text_tokenized = tokenizer.texts_to_sequences([text_processed])
         text_padded = pad_sequences(text_tokenized, maxlen=42, padding='post')
         
-        # Convert numpy arrays to tensors (if needed)
-        text_padded = tf.convert_to_tensor(text_padded, dtype=tf.float32)
-        
         # Perform inference using the loaded model
-        predictions = model(text_padded)
-        predicted_priority = int(np.argmax(predictions.numpy()))  # Convert predictions to NumPy array
+        predictions = model.predict(text_padded)
+        predicted_priority = int(np.argmax(predictions))  # Convert predictions to NumPy array
         
         response = {'predicted_priority': predicted_priority}
         return jsonify(response)
